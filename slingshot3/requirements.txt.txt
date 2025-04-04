@@ -1,0 +1,12 @@
+pypdf
+cryptography
+pyautogui
+requests
+pyperclip
+matplotlib
+numpy
+scapy
+pyotp
+pandas
+psutil
+wmi

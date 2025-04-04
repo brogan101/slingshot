@@ -1,0 +1,18 @@
+{
+    "favorites": [
+        "AV Status",
+        null,
+        "Group Policy Viewer",
+        null,
+        null,
+        null
+    ],
+    "theme": "Dark",
+    "update_check_interval": 3600,
+    "log_level": "WARNING",
+    "language": "English",
+    "default_timeout": 10,
+    "font_size": 12,
+    "show_welcome": false,
+    "default_tab": "Monitoring"
+}

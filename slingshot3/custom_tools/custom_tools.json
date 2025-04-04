@@ -1,0 +1,7 @@
+{
+    "ping google": {
+        "category": "Network",
+        "file": "custom_tools\\ping_google.bat",
+        "type": "batch"
+    }
+}
