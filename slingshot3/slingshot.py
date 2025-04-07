@@ -20,8 +20,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 logging.basicConfig(filename='slingshot.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Feature icons and descriptions (unchanged)
+# Feature icons and descriptions
 FEATURE_ICONS = {
+    # Existing Tools
     "Generate Key": "🔑",
     "Encrypt File": "🔐",
     "Decrypt File": "🔓",
@@ -136,12 +137,109 @@ FEATURE_ICONS = {
     "Sublist3r": "🌐🔍",
     "crt.sh": "📜🔍",
     "Censys": "🔎🌍",
-    "Slack Notify": "📢"
+    "Slack Notify": "📢",
+
+    # New Security Tools
+    "Credential Harvester Detector": "🕵️‍♂️",
+    "Rogue Process Terminator": "🚫",
+    "Secure File Vault": "🗄️",
+    "Anti-Ransomware Shield": "🛡️",
+    "Password Complexity Auditor": "🔍",
+    "Exploit Mitigation Checker": "🛠️",
+    "Token Impersonation Detector": "🎭",
+    "Rootkit Scanner": "🕳️",
+    "Secure Deletion Scheduler": "⏰",
+    "Firewall Rule Analyzer": "🔥",
+
+    # New Monitoring Tools
+    "Process Genealogy Tracker": "🌳",
+    "Network Traffic Anomaly Detector": "📡",
+    "Service Dependency Monitor": "🔗",
+    "Disk Latency Monitor": "⏱️",
+    "Memory Usage Profiler": "📊",
+    "CPU Core Load Balancer": "⚖️",
+    "Event Log Correlation Analyzer": "🔗",
+    "Thermal Stress Monitor": "🌡️",
+    "Network Connection Stability Tracker": "📶",
+    "System Resource Forecasting": "🔮",
+
+    # New Utility Tools
+    "File Metadata Extractor": "📋",
+    "System Path Cleaner": "🧹",
+    "File Extension Analyzer": "📊",
+    "Temporary File Scanner": "🔍",
+    "Registry Key Exporter": "📤",
+    "File Access Logger": "📝",
+    "System Time Synchronizer": "⏰",
+    "Environment Variable Backup": "💾",
+    "File Compression Tool": "📦",
+    "Disk Space Analyzer": "💽",
+
+    # New Network Tools
+    "Network Bandwidth Profiler": "📏",
+    "IP Geolocation Tracker": "🌍",
+    "ARP Spoofing Detector": "🕵️",
+    "DNS Spoofing Detector": "🌐",
+    "Network Device Scanner": "🔎",
+    "Packet Injection Detector": "📡",
+    "Wi-Fi Signal Strength Analyzer": "📶",
+    "Network Protocol Analyzer": "📈",
+    "MAC Address Spoofer Detector": "🎭",
+    "Network Latency Stress Tester": "⚡",
+
+    # New Backup Tools
+    "Incremental Backup Verifier": "✔️",
+    "Backup Compression Optimizer": "📦",
+    "Backup Schedule Auditor": "📅",
+    "Backup Deduplication Tool": "🗑️",
+    "Backup Encryption Auditor": "🔒",
+    "Backup Restore Simulator": "🔄",
+    "Backup Version Manager": "📑",
+    "Backup Space Optimizer": "📉",
+    "Backup Integrity Scanner": "🔍",
+    "Backup File Hasher": "📊",
+
+    # New Advanced Tools
+    "Process Memory Dumper": "💾",
+    "Kernel Memory Scanner": "🧠",
+    "System Call Interceptor": "📞",
+    "Driver Signature Verifier": "✅",
+    "Memory Leak Injector": "🕳️",
+    "Process Privilege Auditor": "🔝",
+    "Thread Priority Adjuster": "⚙️",
+    "System Integrity Verifier": "✔️",
+    "Kernel Module Loader": "🚀",
+    "Process Execution Tracer": "📜",
+
+    # New IT Support Tools
+    "User Session Manager": "👤",
+    "System Update Manager": "📥",
+    "Remote Process Executor": "🖥️",
+    "User Permission Auditor": "🔐",
+    "Service Recovery Configurator": "🔧",
+    "System Log Archiver": "📜",
+    "Hardware Failure Predictor": "⚠️",
+    "Group Policy Enforcer": "📋",
+    "Remote Desktop Auditor": "🖥️",
+    "Task Automation Script Generator": "🤖",
+
+    # New Reconnaissance Tools
+    "Passive DNS Resolver": "🌐",
+    "WHOIS Lookup Tool": "📋",
+    "Subdomain Enumerator": "🔍",
+    "SSL Certificate Analyzer": "🔒",
+    "Network Topology Mapper": "🗺️",
+    "Traceroute Analyzer": "🛤️",
+    "DNS Cache Snooper": "👀",
+    "IP Reputation Checker": "⭐",
+    "Port Service Identifier": "🚪",
+    "Packet Header Analyzer": "📦"
 }
 
 FEATURE_DESCRIPTIONS = {
     f"{FEATURE_ICONS.get(key, '')} {key}" if FEATURE_ICONS.get(key) else key: desc
     for key, desc in {
+        # Existing Tools
         "Sniff Browser Activity": "Monitor browser login traffic.",
         "Generate Key": "Create encryption key.",
         "Encrypt File": "Secure file with key.",
@@ -256,7 +354,103 @@ FEATURE_DESCRIPTIONS = {
         "Sublist3r": "Enumerate subdomains using Sublist3r.",
         "crt.sh": "Query crt.sh for subdomain certificates.",
         "Censys": "Search Censys for subdomain data.",
-        "Slack Notify": "Send notifications to Slack."
+        "Slack Notify": "Send notifications to Slack.",
+
+        # New Security Tools
+        "Credential Harvester Detector": "Detects attempts to harvest credentials via phishing or keylogging.",
+        "Rogue Process Terminator": "Terminates processes not matching a whitelist.",
+        "Secure File Vault": "Creates an encrypted vault for sensitive files.",
+        "Anti-Ransomware Shield": "Monitors and blocks ransomware-like file changes.",
+        "Password Complexity Auditor": "Audits stored passwords for complexity compliance.",
+        "Exploit Mitigation Checker": "Verifies system exploit mitigation settings.",
+        "Token Impersonation Detector": "Detects processes using impersonated tokens.",
+        "Rootkit Scanner": "Scans for potential rootkit signatures.",
+        "Secure Deletion Scheduler": "Schedules secure deletion of files.",
+        "Firewall Rule Analyzer": "Analyzes firewall rules for vulnerabilities.",
+
+        # New Monitoring Tools
+        "Process Genealogy Tracker": "Tracks process parent-child relationships.",
+        "Network Traffic Anomaly Detector": "Detects anomalies in network traffic patterns.",
+        "Service Dependency Monitor": "Monitors service dependencies for failures.",
+        "Disk Latency Monitor": "Tracks disk read/write latency.",
+        "Memory Usage Profiler": "Profiles memory usage by process.",
+        "CPU Core Load Balancer": "Monitors and reports CPU core load distribution.",
+        "Event Log Correlation Analyzer": "Correlates event logs for suspicious patterns.",
+        "Thermal Stress Monitor": "Monitors system thermal stress levels.",
+        "Network Connection Stability Tracker": "Tracks network connection stability.",
+        "System Resource Forecasting": "Forecasts future resource usage trends.",
+
+        # New Utility Tools
+        "File Metadata Extractor": "Extracts metadata from files.",
+        "System Path Cleaner": "Cleans invalid entries from system PATH.",
+        "File Extension Analyzer": "Analyzes file extensions in a directory.",
+        "Temporary File Scanner": "Scans and lists temporary files.",
+        "Registry Key Exporter": "Exports a specified registry key.",
+        "File Access Logger": "Logs file access attempts.",
+        "System Time Synchronizer": "Synchronizes system time with an NTP server.",
+        "Environment Variable Backup": "Backs up environment variables.",
+        "File Compression Tool": "Compresses files into a ZIP archive.",
+        "Disk Space Analyzer": "Analyzes disk space usage.",
+
+        # New Network Tools
+        "Network Bandwidth Profiler": "Profiles network bandwidth usage.",
+        "IP Geolocation Tracker": "Tracks IP geolocation data.",
+        "ARP Spoofing Detector": "Detects ARP spoofing attempts.",
+        "DNS Spoofing Detector": "Detects DNS spoofing attempts.",
+        "Network Device Scanner": "Scans for devices on the network.",
+        "Packet Injection Detector": "Detects unusual packet injections.",
+        "Wi-Fi Signal Strength Analyzer": "Analyzes Wi-Fi signal strength.",
+        "Network Protocol Analyzer": "Analyzes network protocol distribution.",
+        "MAC Address Spoofer Detector": "Detects MAC address spoofing.",
+        "Network Latency Stress Tester": "Tests network latency under stress.",
+
+        # New Backup Tools
+        "Incremental Backup Verifier": "Verifies integrity of incremental backups.",
+        "Backup Compression Optimizer": "Optimizes backup compression ratios.",
+        "Backup Schedule Auditor": "Audits scheduled backup executions.",
+        "Backup Deduplication Tool": "Removes duplicates from backups.",
+        "Backup Encryption Auditor": "Audits encryption status of backups.",
+        "Backup Restore Simulator": "Simulates backup restoration.",
+        "Backup Version Manager": "Manages multiple backup versions.",
+        "Backup Space Optimizer": "Optimizes backup storage space.",
+        "Backup Integrity Scanner": "Scans backups for integrity issues.",
+        "Backup File Hasher": "Generates hashes for backup files.",
+
+        # New Advanced Tools
+        "Process Memory Dumper": "Dumps process memory to a file.",
+        "Kernel Memory Scanner": "Scans kernel memory for anomalies.",
+        "System Call Interceptor": "Intercepts and logs system calls.",
+        "Driver Signature Verifier": "Verifies signatures of loaded drivers.",
+        "Memory Leak Injector": "Injects a memory leak for testing.",
+        "Process Privilege Auditor": "Audits process privileges.",
+        "Thread Priority Adjuster": "Adjusts thread priorities.",
+        "System Integrity Verifier": "Verifies system file integrity.",
+        "Kernel Module Loader": "Loads a kernel module (simulated).",
+        "Process Execution Tracer": "Traces process executions.",
+
+        # New IT Support Tools
+        "User Session Manager": "Manages active user sessions.",
+        "System Update Manager": "Manages system updates.",
+        "Remote Process Executor": "Executes a process on a remote machine.",
+        "User Permission Auditor": "Audits user permissions.",
+        "Service Recovery Configurator": "Configures service recovery options.",
+        "System Log Archiver": "Archives system logs.",
+        "Hardware Failure Predictor": "Predicts potential hardware failures.",
+        "Group Policy Enforcer": "Enforces group policy settings.",
+        "Remote Desktop Auditor": "Audits remote desktop connections.",
+        "Task Automation Script Generator": "Generates scripts for task automation.",
+
+        # New Reconnaissance Tools
+        "Passive DNS Resolver": "Resolves domains passively via DNS records.",
+        "WHOIS Lookup Tool": "Performs WHOIS lookups on domains.",
+        "Subdomain Enumerator": "Enumerates subdomains of a target domain.",
+        "SSL Certificate Analyzer": "Analyzes SSL certificates of a domain.",
+        "Network Topology Mapper": "Maps network topology.",
+        "Traceroute Analyzer": "Analyzes network traceroute data.",
+        "DNS Cache Snooper": "Snoops DNS cache for recent queries.",
+        "IP Reputation Checker": "Checks IP reputation scores.",
+        "Port Service Identifier": "Identifies services on open ports.",
+        "Packet Header Analyzer": "Analyzes packet headers for insights."
     }.items()
 }
 
@@ -1031,40 +1225,72 @@ class SlingShot:
         logger.info("Application fully terminated.")
         os._exit(0)
 
+
     def get_categories(self):
         categories = {
             "Security": [
+                # Existing Security Tools
                 "Generate Key", "Encrypt File", "Decrypt File", "Hash File", "Shred File",
                 "Password Manager", "OTP Generator", "BitLocker Status", "Secure Boot Check",
                 "Harden Sys", "AV Status", "Malware Scanner", "Phishing Detector",
                 "Firewall Manager", "USB Lockdown", "Password Policy Enforcer", "Secure File Transfer",
-                "Vuln Scan", "Audit Policy Viewer"
+                "Vuln Scan", "Audit Policy Viewer",
+                # New Security Tools
+                "Credential Harvester Detector", "Rogue Process Terminator", "Secure File Vault",
+                "Anti-Ransomware Shield", "Password Complexity Auditor", "Exploit Mitigation Checker",
+                "Token Impersonation Detector", "Rootkit Scanner", "Secure Deletion Scheduler",
+                "Firewall Rule Analyzer"
             ],
             "Monitoring": [
+                # Existing Monitoring Tools
                 "Resource Monitor", "Service Monitor", "Real-Time Alerts", "CPU Temperature Monitor",
                 "Network Latency Graph", "Event Log Analyzer", "Disk I/O Monitor",
                 "System Uptime Tracker", "Alert Scheduler", "Network Connection Anomaly Detector",
                 "File System Anomaly Scanner", "Service Behavior Profiler", "Registry Anomaly Detector",
-                "Network Intrusion Detection", "User Activity Logger", "Process Heatmap"
+                "Network Intrusion Detection", "User Activity Logger", "Process Heatmap",
+                # New Monitoring Tools
+                "Process Genealogy Tracker", "Network Traffic Anomaly Detector", "Service Dependency Monitor",
+                "Disk Latency Monitor", "Memory Usage Profiler", "CPU Core Load Balancer",
+                "Event Log Correlation Analyzer", "Thermal Stress Monitor", "Network Connection Stability Tracker",
+                "System Resource Forecasting"
             ],
             "Utility": [
+                # Existing Utility Tools
                 "System Info", "Clear Temp Files", "List Users", "Check Disk Health",
                 "List Environment Vars", "File Permissions Viewer", "Registry Manager",
                 "Shortcut Creator", "Recycle Bin Manager", "File Integrity Checker",
                 "Text Encoder/Decoder", "Screen Capture Tool", "PDF Merger", "Folder Sync",
-                "Duplicate File Finder", "System Tray Manager", "Clipboard Manager", "Batch File Renamer"
+                "Duplicate File Finder", "System Tray Manager", "Clipboard Manager", "Batch File Renamer",
+                # New Utility Tools
+                "File Metadata Extractor", "System Path Cleaner", "File Extension Analyzer",
+                "Temporary File Scanner", "Registry Key Exporter", "File Access Logger",
+                "System Time Synchronizer", "Environment Variable Backup", "File Compression Tool",
+                "Disk Space Analyzer"
             ],
             "Network": [
+                # Existing Network Tools
                 "Network Monitor", "Port Scanner", "Wi-Fi Analyzer", "DNS Resolver", "Packet Sniffer",
                 "Bandwidth Limiter", "Sniff Browser Activity", "Dynamic DNS Resolver Monitor",
-                "Network Packet Entropy Analyzer"
+                "Network Packet Entropy Analyzer",
+                # New Network Tools
+                "Network Bandwidth Profiler", "IP Geolocation Tracker", "ARP Spoofing Detector",
+                "DNS Spoofing Detector", "Network Device Scanner", "Packet Injection Detector",
+                "Wi-Fi Signal Strength Analyzer", "Network Protocol Analyzer", "MAC Address Spoofer Detector",
+                "Network Latency Stress Tester"
             ],
             "Backup": [
+                # Existing Backup Tools
                 "Backup Manager", "Backup Verifier", "Backup Scheduler", "Differential Backup Tool",
                 "Backup Encryption Key Manager", "Cloud Backup Uploader", "Shadow Copy Manager",
-                "File Recovery Tool", "System Restore Point Creator"
+                "File Recovery Tool", "System Restore Point Creator",
+                # New Backup Tools
+                "Incremental Backup Verifier", "Backup Compression Optimizer", "Backup Schedule Auditor",
+                "Backup Deduplication Tool", "Backup Encryption Auditor", "Backup Restore Simulator",
+                "Backup Version Manager", "Backup Space Optimizer", "Backup Integrity Scanner",
+                "Backup File Hasher"
             ],
             "Advanced": [
+                # Existing Advanced Tools
                 "Process Manager", "Process Injection Detector", "Process Hollowing Detector",
                 "Memory Leak Detector", "Memory Forensics Lite", "Kernel Driver Enumerator",
                 "Thread Stack Analyzer", "Privilege Escalation Checker", "Keylogger Detector",
@@ -1073,15 +1299,32 @@ class SlingShot:
                 "Sys Info Export", "BIOS Info", "Remote Desktop Toggle", "Power Plan Manager",
                 "Command History", "Group Policy Viewer", "Windows Feature Manager",
                 "Multi-Monitor Config", "Event Log Cleaner", "Driver Verifier", "System File Checker",
-                "Performance Benchmark", "Startup Items", "Startup Optimizer"
+                "Performance Benchmark", "Startup Items", "Startup Optimizer",
+                # New Advanced Tools
+                "Process Memory Dumper", "Kernel Memory Scanner", "System Call Interceptor",
+                "Driver Signature Verifier", "Memory Leak Injector", "Process Privilege Auditor",
+                "Thread Priority Adjuster", "System Integrity Verifier", "Kernel Module Loader",
+                "Process Execution Tracer"
             ],
             "IT Support": [
+                # Existing IT Support Tools
                 "Remote Assistance Tool", "User Account Manager", "System Diagnostic Report",
                 "Service Dependency Viewer", "Hardware Inventory Tool", "Scheduled Task Manager",
-                "Event Log Manager"
+                "Event Log Manager",
+                # New IT Support Tools
+                "User Session Manager", "System Update Manager", "Remote Process Executor",
+                "User Permission Auditor", "Service Recovery Configurator", "System Log Archiver",
+                "Hardware Failure Predictor", "Group Policy Enforcer", "Remote Desktop Auditor",
+                "Task Automation Script Generator"
             ],
             "Reconnaissance": [
-                "Sublist3r", "crt.sh", "Censys", "Slack Notify"
+                # Existing Reconnaissance Tools
+                "Sublist3r", "crt.sh", "Censys", "Slack Notify",
+                # New Reconnaissance Tools
+                "Passive DNS Resolver", "WHOIS Lookup Tool", "Subdomain Enumerator",
+                "SSL Certificate Analyzer", "Network Topology Mapper", "Traceroute Analyzer",
+                "DNS Cache Snooper", "IP Reputation Checker", "Port Service Identifier",
+                "Packet Header Analyzer"
             ]
         }
         # Merge with custom tools
@@ -1636,37 +1879,68 @@ class SlingShot:
     def get_categories(self):
         categories = {
             "Security": [
+                # Existing Security Tools
                 "Generate Key", "Encrypt File", "Decrypt File", "Hash File", "Shred File",
                 "Password Manager", "OTP Generator", "BitLocker Status", "Secure Boot Check",
                 "Harden Sys", "AV Status", "Malware Scanner", "Phishing Detector",
                 "Firewall Manager", "USB Lockdown", "Password Policy Enforcer", "Secure File Transfer",
-                "Vuln Scan", "Audit Policy Viewer"
+                "Vuln Scan", "Audit Policy Viewer",
+                # New Security Tools
+                "Credential Harvester Detector", "Rogue Process Terminator", "Secure File Vault",
+                "Anti-Ransomware Shield", "Password Complexity Auditor", "Exploit Mitigation Checker",
+                "Token Impersonation Detector", "Rootkit Scanner", "Secure Deletion Scheduler",
+                "Firewall Rule Analyzer"
             ],
             "Monitoring": [
+                # Existing Monitoring Tools
                 "Resource Monitor", "Service Monitor", "Real-Time Alerts", "CPU Temperature Monitor",
                 "Network Latency Graph", "Event Log Analyzer", "Disk I/O Monitor",
                 "System Uptime Tracker", "Alert Scheduler", "Network Connection Anomaly Detector",
                 "File System Anomaly Scanner", "Service Behavior Profiler", "Registry Anomaly Detector",
-                "Network Intrusion Detection", "User Activity Logger", "Process Heatmap"
+                "Network Intrusion Detection", "User Activity Logger", "Process Heatmap",
+                # New Monitoring Tools
+                "Process Genealogy Tracker", "Network Traffic Anomaly Detector", "Service Dependency Monitor",
+                "Disk Latency Monitor", "Memory Usage Profiler", "CPU Core Load Balancer",
+                "Event Log Correlation Analyzer", "Thermal Stress Monitor", "Network Connection Stability Tracker",
+                "System Resource Forecasting"
             ],
             "Utility": [
+                # Existing Utility Tools
                 "System Info", "Clear Temp Files", "List Users", "Check Disk Health",
                 "List Environment Vars", "File Permissions Viewer", "Registry Manager",
                 "Shortcut Creator", "Recycle Bin Manager", "File Integrity Checker",
                 "Text Encoder/Decoder", "Screen Capture Tool", "PDF Merger", "Folder Sync",
-                "Duplicate File Finder", "System Tray Manager", "Clipboard Manager", "Batch File Renamer"
+                "Duplicate File Finder", "System Tray Manager", "Clipboard Manager", "Batch File Renamer",
+                # New Utility Tools
+                "File Metadata Extractor", "System Path Cleaner", "File Extension Analyzer",
+                "Temporary File Scanner", "Registry Key Exporter", "File Access Logger",
+                "System Time Synchronizer", "Environment Variable Backup", "File Compression Tool",
+                "Disk Space Analyzer"
             ],
             "Network": [
+                # Existing Network Tools
                 "Network Monitor", "Port Scanner", "Wi-Fi Analyzer", "DNS Resolver", "Packet Sniffer",
                 "Bandwidth Limiter", "Sniff Browser Activity", "Dynamic DNS Resolver Monitor",
-                "Network Packet Entropy Analyzer"
+                "Network Packet Entropy Analyzer",
+                # New Network Tools
+                "Network Bandwidth Profiler", "IP Geolocation Tracker", "ARP Spoofing Detector",
+                "DNS Spoofing Detector", "Network Device Scanner", "Packet Injection Detector",
+                "Wi-Fi Signal Strength Analyzer", "Network Protocol Analyzer", "MAC Address Spoofer Detector",
+                "Network Latency Stress Tester"
             ],
             "Backup": [
+                # Existing Backup Tools
                 "Backup Manager", "Backup Verifier", "Backup Scheduler", "Differential Backup Tool",
                 "Backup Encryption Key Manager", "Cloud Backup Uploader", "Shadow Copy Manager",
-                "File Recovery Tool", "System Restore Point Creator"
+                "File Recovery Tool", "System Restore Point Creator",
+                # New Backup Tools
+                "Incremental Backup Verifier", "Backup Compression Optimizer", "Backup Schedule Auditor",
+                "Backup Deduplication Tool", "Backup Encryption Auditor", "Backup Restore Simulator",
+                "Backup Version Manager", "Backup Space Optimizer", "Backup Integrity Scanner",
+                "Backup File Hasher"
             ],
             "Advanced": [
+                # Existing Advanced Tools
                 "Process Manager", "Process Injection Detector", "Process Hollowing Detector",
                 "Memory Leak Detector", "Memory Forensics Lite", "Kernel Driver Enumerator",
                 "Thread Stack Analyzer", "Privilege Escalation Checker", "Keylogger Detector",
@@ -1675,15 +1949,32 @@ class SlingShot:
                 "Sys Info Export", "BIOS Info", "Remote Desktop Toggle", "Power Plan Manager",
                 "Command History", "Group Policy Viewer", "Windows Feature Manager",
                 "Multi-Monitor Config", "Event Log Cleaner", "Driver Verifier", "System File Checker",
-                "Performance Benchmark", "Startup Items", "Startup Optimizer"
+                "Performance Benchmark", "Startup Items", "Startup Optimizer",
+                # New Advanced Tools
+                "Process Memory Dumper", "Kernel Memory Scanner", "System Call Interceptor",
+                "Driver Signature Verifier", "Memory Leak Injector", "Process Privilege Auditor",
+                "Thread Priority Adjuster", "System Integrity Verifier", "Kernel Module Loader",
+                "Process Execution Tracer"
             ],
             "IT Support": [
+                # Existing IT Support Tools
                 "Remote Assistance Tool", "User Account Manager", "System Diagnostic Report",
                 "Service Dependency Viewer", "Hardware Inventory Tool", "Scheduled Task Manager",
-                "Event Log Manager"
+                "Event Log Manager",
+                # New IT Support Tools
+                "User Session Manager", "System Update Manager", "Remote Process Executor",
+                "User Permission Auditor", "Service Recovery Configurator", "System Log Archiver",
+                "Hardware Failure Predictor", "Group Policy Enforcer", "Remote Desktop Auditor",
+                "Task Automation Script Generator"
             ],
             "Reconnaissance": [
-                "Sublist3r", "crt.sh", "Censys", "Slack Notify"
+                # Existing Reconnaissance Tools
+                "Sublist3r", "crt.sh", "Censys", "Slack Notify",
+                # New Reconnaissance Tools
+                "Passive DNS Resolver", "WHOIS Lookup Tool", "Subdomain Enumerator",
+                "SSL Certificate Analyzer", "Network Topology Mapper", "Traceroute Analyzer",
+                "DNS Cache Snooper", "IP Reputation Checker", "Port Service Identifier",
+                "Packet Header Analyzer"
             ]
         }
         # Merge with custom tools
@@ -1906,108 +2197,22 @@ class SlingShot:
                         ToolTip(btn, FEATURE_DESCRIPTIONS.get(f"{FEATURE_ICONS.get(feature, '')} {feature}", ""))
                     logger.info(f"Added {num_tools} buttons to Monitoring tab")
                     
-                    # Add a bordered frame for the plot with adjusted size
-                    plot_border_frame = ctk.CTkFrame(frame, fg_color="#2a2a2a", border_color="#007bff", border_width=2)
-                    plot_border_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
-                    plot_border_frame.grid_rowconfigure(0, weight=1)
-                    plot_border_frame.grid_columnconfigure(0, weight=1)
-
-                    # Increase figure size to ensure labels fit
-                    self.canvas = FigureCanvasTkAgg(plt.figure(figsize=(6, 5)), master=plot_border_frame)
-                    self.canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-                    self.ax = self.canvas.figure.add_subplot(111)
-                    logger.info("Added plot area to Monitoring tab with border and adjusted size")
-                else:
-                    num_tools = len(features)
-                    columns_per_row = 4
-                    num_rows = (num_tools + columns_per_row - 1) // columns_per_row
-                    
-                    grid_frame = ctk.CTkFrame(frame, fg_color="#1f1f1f")
-                    grid_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-                    
-                    for i in range(num_rows):
-                        grid_frame.grid_rowconfigure(i, weight=1)
-                    for j in range(columns_per_row):
-                        grid_frame.grid_columnconfigure(j, weight=1)
-                    
-                    for idx, feature in enumerate(features):
-                        row = idx // columns_per_row
-                        col = idx % columns_per_row
-                        icon = FEATURE_ICONS.get(feature, '')
-                        btn_text = f"{icon} {feature}" if icon else feature
-                        logger.info(f"Creating button for {feature} with text: {btn_text}")
-                        btn = ctk.CTkButton(
-                            grid_frame,
-                            text=btn_text,
-                            command=lambda f=feature: self.run_feature(f),
-                            width=200,
-                            height=30,
-                            font=("Segoe UI Emoji", self.font_size-2),
-                            fg_color="#007bff"
-                        )
-                        btn.grid(row=row, column=col, padx=2, pady=2, sticky="ew")
-                        btn.bind("<Button-3>", lambda e, t=feature: self.add_to_favorites(t))
-                        ToolTip(btn, FEATURE_DESCRIPTIONS.get(f"{FEATURE_ICONS.get(feature, '')} {feature}", ""))
-                    logger.info(f"Added {num_tools} buttons to {tab_name} tab")
-        except Exception as e:
-            logger.error(f"Failed to add buttons to tabs: {str(e)}")
-            raise
-
-    def add_buttons_to_tabs(self):
-        try:
-            categories = self.get_categories()
-            logger.info("Adding buttons to tabs")
-            for tab_name, features in categories.items():
-                logger.info(f"Processing tab: {tab_name}")
-                tab = self.notebook.tab(tab_name)
-                frame = ctk.CTkFrame(tab, fg_color="#1f1f1f")
-                frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-
-                if tab_name == "Monitoring":
-                    tab.grid_rowconfigure(0, weight=0)
-                    tab.grid_rowconfigure(1, weight=1)
-                    tab.grid_columnconfigure(0, weight=1)
-                    
-                    num_tools = len(features)
-                    columns_per_row = 4  
-                    num_rows = (num_tools + columns_per_row - 1) // columns_per_row
-                    
-                    button_frame = ctk.CTkFrame(frame, fg_color="#1f1f1f")
-                    button_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
-                    
-                    for i in range(num_rows):
-                        button_frame.grid_rowconfigure(i, weight=1)
-                    for j in range(columns_per_row):
-                        button_frame.grid_columnconfigure(j, weight=1)
-                    
-                    for idx, feature in enumerate(features):
-                        row = idx // columns_per_row
-                        col = idx % columns_per_row
-                        icon = FEATURE_ICONS.get(feature, '')
-                        btn_text = f"{icon} {feature}" if icon else feature
-                        logger.info(f"Creating button for {feature} with text: {btn_text}")
-                        btn = ctk.CTkButton(
-                            button_frame,
-                            text=btn_text,
-                            command=lambda f=feature: self.run_feature(f),
-                            width=200,
-                            height=30,
-                            font=("Segoe UI Emoji", self.font_size-2),
-                            fg_color="#007bff"
-                        )
-                        btn.grid(row=row, column=col, padx=2, pady=2, sticky="ew")
-                        btn.bind("<Button-3>", lambda e, t=feature: self.add_to_favorites(t))
-                        ToolTip(btn, FEATURE_DESCRIPTIONS.get(f"{FEATURE_ICONS.get(feature, '')} {feature}", ""))
-                    logger.info(f"Added {num_tools} buttons to Monitoring tab")
+                    # Dynamically adjust graph size based on number of tools
+                    # Base size: 5x4 inches; reduce height as rows increase
+                    base_width = 5
+                    base_height = 4
+                    height_reduction = min(0.2 * num_rows, base_height - 1)  # Reduce by 0.2 per row, max reduction to 1 inch height
+                    graph_height = base_height - height_reduction
+                    graph_width = base_width  # Width can remain constant or adjust if preferred
                     
                     plot_frame = ctk.CTkFrame(frame, fg_color="#1f1f1f")
                     plot_frame.grid(row=1, column=0, sticky="n", padx=5, pady=5)
                     plot_frame.grid_rowconfigure(0, weight=1)
                     plot_frame.grid_columnconfigure(0, weight=1)
-                    self.canvas = FigureCanvasTkAgg(plt.figure(figsize=(5, 4)), master=plot_frame)
+                    self.canvas = FigureCanvasTkAgg(plt.figure(figsize=(graph_width, graph_height)), master=plot_frame)
                     self.canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
                     self.ax = self.canvas.figure.add_subplot(111)
-                    logger.info("Added plot area to Monitoring tab")
+                    logger.info(f"Added plot area to Monitoring tab with size {graph_width}x{graph_height}")
                 else:
                     num_tools = len(features)
                     columns_per_row = 4
@@ -2850,6 +3055,328 @@ class SlingShot:
             error_msg = f"Failed to remove tool '{tool_name}': {str(e)}"
             logger.error(error_msg)
             messagebox.showerror("Error", error_msg, parent=popup)
+
+# Security Tools
+def credential_harvester_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.credential_harvester_detector(duration), duration, "Credential Harvester Detector")
+
+def rogue_process_terminator(self):
+    whitelist_file = filedialog.askopenfilename(title="Select Whitelist File", filetypes=[("Text files", "*.txt")])
+    self.queue_task(lambda: tools.rogue_process_terminator(whitelist_file), self.default_timeout, "Rogue Process Terminator")
+
+def secure_file_vault(self):
+    folder = filedialog.askdirectory(title="Select Folder to Vault")
+    password = simpledialog.askstring("Password", "Enter vault password:", show="*")
+    self.queue_task(lambda: tools.secure_file_vault(folder, password), self.default_timeout, "Secure File Vault")
+
+def anti_ransomware_shield(self):
+    directory = filedialog.askdirectory(title="Select Directory to Monitor")
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=60)
+    self.queue_task(lambda: tools.anti_ransomware_shield(directory, duration), duration, "Anti-Ransomware Shield")
+
+def password_complexity_auditor(self):
+    self.queue_task(lambda: tools.password_complexity_auditor(self.passwords_db), self.default_timeout, "Password Complexity Auditor")
+
+def exploit_mitigation_checker(self):
+    self.queue_task(lambda: tools.exploit_mitigation_checker(self.command_history_log), self.default_timeout, "Exploit Mitigation Checker")
+
+def token_impersonation_detector(self):
+    self.queue_task(lambda: tools.token_impersonation_detector(), self.default_timeout, "Token Impersonation Detector")
+
+def rootkit_scanner(self):
+    self.queue_task(lambda: tools.rootkit_scanner(), self.default_timeout, "Rootkit Scanner")
+
+def secure_deletion_scheduler(self):
+    file_path = filedialog.askopenfilename(title="Select File to Schedule")
+    delay = simpledialog.askinteger("Delay", "Enter delay (seconds):", initialvalue=60)
+    self.queue_task(lambda: tools.secure_deletion_scheduler(file_path, delay), delay, "Secure Deletion Scheduler")
+
+def firewall_rule_analyzer(self):
+    self.queue_task(lambda: tools.firewall_rule_analyzer(self.command_history_log), self.default_timeout, "Firewall Rule Analyzer")
+
+# Monitoring Tools
+def process_genealogy_tracker(self):
+    self.queue_task(lambda: tools.process_genealogy_tracker(), self.default_timeout, "Process Genealogy Tracker")
+
+def network_traffic_anomaly_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.network_traffic_anomaly_detector(duration), duration, "Network Traffic Anomaly Detector")
+
+def service_dependency_monitor(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.service_dependency_monitor(duration), duration, "Service Dependency Monitor")
+
+def disk_latency_monitor(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.disk_latency_monitor(duration), duration, "Disk Latency Monitor")
+
+def memory_usage_profiler(self):
+    self.queue_task(lambda: tools.memory_usage_profiler(), self.default_timeout, "Memory Usage Profiler")
+
+def cpu_core_load_balancer(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.cpu_core_load_balancer(duration), duration, "CPU Core Load Balancer")
+
+def event_log_correlation_analyzer(self):
+    duration = simpledialog.askinteger("Duration", "Enter analysis duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.event_log_correlation_analyzer(duration), duration, "Event Log Correlation Analyzer")
+
+def thermal_stress_monitor(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.thermal_stress_monitor(duration), duration, "Thermal Stress Monitor")
+
+def network_connection_stability_tracker(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.network_connection_stability_tracker(duration), duration, "Network Connection Stability Tracker")
+
+def system_resource_forecasting(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.system_resource_forecasting(duration), duration, "System Resource Forecasting")
+
+# Utility Tools
+def file_metadata_extractor(self):
+    file_path = filedialog.askopenfilename(title="Select File")
+    self.queue_task(lambda: tools.file_metadata_extractor(file_path), self.default_timeout, "File Metadata Extractor")
+
+def system_path_cleaner(self):
+    self.queue_task(lambda: tools.system_path_cleaner(), self.default_timeout, "System Path Cleaner")
+
+def file_extension_analyzer(self):
+    directory = filedialog.askdirectory(title="Select Directory")
+    self.queue_task(lambda: tools.file_extension_analyzer(directory), self.default_timeout, "File Extension Analyzer")
+
+def temporary_file_scanner(self):
+    self.queue_task(lambda: tools.temporary_file_scanner(), self.default_timeout, "Temporary File Scanner")
+
+def registry_key_exporter(self):
+    key_path = simpledialog.askstring("Key Path", "Enter registry key path:", initialvalue="HKLM\\Software")
+    file_path = filedialog.asksaveasfilename(defaultextension=".reg")
+    self.queue_task(lambda: tools.registry_key_exporter(key_path, file_path, self.command_history_log), self.default_timeout, "Registry Key Exporter")
+
+def file_access_logger(self):
+    file_path = filedialog.askopenfilename(title="Select File")
+    duration = simpledialog.askinteger("Duration", "Enter logging duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.file_access_logger(file_path, duration), duration, "File Access Logger")
+
+def system_time_synchronizer(self):
+    self.queue_task(lambda: tools.system_time_synchronizer(self.command_history_log), self.default_timeout, "System Time Synchronizer")
+
+def environment_variable_backup(self):
+    file_path = filedialog.asksaveasfilename(defaultextension=".json")
+    self.queue_task(lambda: tools.environment_variable_backup(file_path), self.default_timeout, "Environment Variable Backup")
+
+def file_compression_tool(self):
+    files = filedialog.askopenfilenames(title="Select Files")
+    output = filedialog.asksaveasfilename(defaultextension=".zip")
+    self.queue_task(lambda: tools.file_compression_tool(files, output), self.default_timeout, "File Compression Tool")
+
+def disk_space_analyzer(self):
+    directory = filedialog.askdirectory(title="Select Directory")
+    self.queue_task(lambda: tools.disk_space_analyzer(directory), self.default_timeout, "Disk Space Analyzer")
+
+# Network Tools
+def network_bandwidth_profiler(self):
+    duration = simpledialog.askinteger("Duration", "Enter profiling duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.network_bandwidth_profiler(duration), duration, "Network Bandwidth Profiler")
+
+def ip_geolocation_tracker(self):
+    ip = simpledialog.askstring("IP", "Enter IP address:")
+    self.queue_task(lambda: tools.ip_geolocation_tracker(ip), self.default_timeout, "IP Geolocation Tracker")
+
+def arp_spoofing_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.arp_spoofing_detector(duration), duration, "ARP Spoofing Detector")
+
+def dns_spoofing_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.dns_spoofing_detector(duration), duration, "DNS Spoofing Detector")
+
+def network_device_scanner(self):
+    subnet = simpledialog.askstring("Subnet", "Enter subnet (e.g., 192.168.1.):", initialvalue="192.168.1.")
+    self.queue_task(lambda: tools.network_device_scanner(subnet), self.default_timeout, "Network Device Scanner")
+
+def packet_injection_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.packet_injection_detector(duration), duration, "Packet Injection Detector")
+
+def wi_fi_signal_strength_analyzer(self):
+    duration = simpledialog.askinteger("Duration", "Enter analysis duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.wi_fi_signal_strength_analyzer(duration), duration, "Wi-Fi Signal Strength Analyzer")
+
+def network_protocol_analyzer(self):
+    duration = simpledialog.askinteger("Duration", "Enter analysis duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.network_protocol_analyzer(duration), duration, "Network Protocol Analyzer")
+
+def mac_address_spoofer_detector(self):
+    duration = simpledialog.askinteger("Duration", "Enter monitoring duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.mac_address_spoofer_detector(duration), duration, "MAC Address Spoofer Detector")
+
+def network_latency_stress_tester(self):
+    host = simpledialog.askstring("Host", "Enter host to test:", initialvalue="8.8.8.8")
+    duration = simpledialog.askinteger("Duration", "Enter test duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.network_latency_stress_tester(host, duration, self.command_history_log), duration, "Network Latency Stress Tester")
+
+# Backup Tools
+def incremental_backup_verifier(self):
+    backup_path = filedialog.askopenfilename(title="Select Incremental Backup")
+    self.queue_task(lambda: tools.incremental_backup_verifier(backup_path), self.default_timeout, "Incremental Backup Verifier")
+
+def backup_compression_optimizer(self):
+    source = filedialog.askdirectory(title="Select Source")
+    output = filedialog.asksaveasfilename(defaultextension=".zip")
+    self.queue_task(lambda: tools.backup_compression_optimizer(source, output), self.default_timeout, "Backup Compression Optimizer")
+
+def backup_schedule_auditor(self):
+    self.queue_task(lambda: tools.backup_schedule_auditor(self.scheduled_tasks), self.default_timeout, "Backup Schedule Auditor")
+
+def backup_deduplication_tool(self):
+    backup_path = filedialog.askdirectory(title="Select Backup Directory")
+    self.queue_task(lambda: tools.backup_deduplication_tool(backup_path), self.default_timeout, "Backup Deduplication Tool")
+
+def backup_encryption_auditor(self):
+    backup_path = filedialog.askdirectory(title="Select Backup Directory")
+    self.queue_task(lambda: tools.backup_encryption_auditor(backup_path), self.default_timeout, "Backup Encryption Auditor")
+
+def backup_restore_simulator(self):
+    backup_file = filedialog.askopenfilename(title="Select Backup File")
+    self.queue_task(lambda: tools.backup_restore_simulator(backup_file), self.default_timeout, "Backup Restore Simulator")
+
+def backup_version_manager(self):
+    directory = filedialog.askdirectory(title="Select Backup Directory")
+    self.queue_task(lambda: tools.backup_version_manager(directory), self.default_timeout, "Backup Version Manager")
+
+def backup_space_optimizer(self):
+    directory = filedialog.askdirectory(title="Select Backup Directory")
+    self.queue_task(lambda: tools.backup_space_optimizer(directory), self.default_timeout, "Backup Space Optimizer")
+
+def backup_integrity_scanner(self):
+    directory = filedialog.askdirectory(title="Select Backup Directory")
+    self.queue_task(lambda: tools.backup_integrity_scanner(directory), self.default_timeout, "Backup Integrity Scanner")
+
+def backup_file_hasher(self):
+    backup_file = filedialog.askopenfilename(title="Select Backup File")
+    self.queue_task(lambda: tools.backup_file_hasher(backup_file), self.default_timeout, "Backup File Hasher")
+
+# Advanced Tools
+def process_memory_dumper(self):
+    pid = simpledialog.askinteger("PID", "Enter process ID:")
+    output = filedialog.asksaveasfilename(defaultextension=".dmp")
+    self.queue_task(lambda: tools.process_memory_dumper(pid, output), self.default_timeout, "Process Memory Dumper")
+
+def kernel_memory_scanner(self):
+    self.queue_task(lambda: tools.kernel_memory_scanner(), self.default_timeout, "Kernel Memory Scanner")
+
+def system_call_interceptor(self):
+    pid = simpledialog.askinteger("PID", "Enter process ID:")
+    duration = simpledialog.askinteger("Duration", "Enter interception duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.system_call_interceptor(pid, duration), duration, "System Call Interceptor")
+
+def driver_signature_verifier(self):
+    self.queue_task(lambda: tools.driver_signature_verifier(), self.default_timeout, "Driver Signature Verifier")
+
+def memory_leak_injector(self):
+    duration = simpledialog.askinteger("Duration", "Enter leak duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.memory_leak_injector(duration), duration, "Memory Leak Injector")
+
+def process_privilege_auditor(self):
+    pid = simpledialog.askinteger("PID", "Enter process ID:")
+    self.queue_task(lambda: tools.process_privilege_auditor(pid), self.default_timeout, "Process Privilege Auditor")
+
+def thread_priority_adjuster(self):
+    pid = simpledialog.askinteger("PID", "Enter process ID:")
+    priority = simpledialog.askinteger("Priority", "Enter priority (-2 to 2):", initialvalue=0)
+    self.queue_task(lambda: tools.thread_priority_adjuster(pid, priority), self.default_timeout, "Thread Priority Adjuster")
+
+def system_integrity_verifier(self):
+    self.queue_task(lambda: tools.system_integrity_verifier(self.command_history_log), self.default_timeout, "System Integrity Verifier")
+
+def kernel_module_loader(self):
+    module_path = filedialog.askopenfilename(title="Select Module File")
+    self.queue_task(lambda: tools.kernel_module_loader(module_path), self.default_timeout, "Kernel Module Loader")
+
+def process_execution_tracer(self):
+    duration = simpledialog.askinteger("Duration", "Enter tracing duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.process_execution_tracer(duration), duration, "Process Execution Tracer")
+
+# IT Support Tools
+def user_session_manager(self):
+    action = simpledialog.askstring("Action", "List (l), Disconnect (d), Logoff (l)?")
+    self.queue_task(lambda: tools.user_session_manager(action), self.default_timeout, "User Session Manager")
+
+def system_update_manager(self):
+    self.queue_task(lambda: tools.system_update_manager(self.command_history_log), self.default_timeout, "System Update Manager")
+
+def remote_process_executor(self):
+    host = simpledialog.askstring("Host", "Enter remote host:")
+    command = simpledialog.askstring("Command", "Enter command to execute:")
+    self.queue_task(lambda: tools.remote_process_executor(host, command), self.default_timeout, "Remote Process Executor")
+
+def user_permission_auditor(self):
+    username = simpledialog.askstring("Username", "Enter username:")
+    self.queue_task(lambda: tools.user_permission_auditor(username, self.command_history_log), self.default_timeout, "User Permission Auditor")
+
+def service_recovery_configurator(self):
+    service = simpledialog.askstring("Service", "Enter service name:")
+    self.queue_task(lambda: tools.service_recovery_configurator(service, self.command_history_log), self.default_timeout, "Service Recovery Configurator")
+
+def system_log_archiver(self):
+    output = filedialog.asksaveasfilename(defaultextension=".zip")
+    self.queue_task(lambda: tools.system_log_archiver(output), self.default_timeout, "System Log Archiver")
+
+def hardware_failure_predictor(self):
+    self.queue_task(lambda: tools.hardware_failure_predictor(self.command_history_log), self.default_timeout, "Hardware Failure Predictor")
+
+def group_policy_enforcer(self):
+    self.queue_task(lambda: tools.group_policy_enforcer(self.command_history_log), self.default_timeout, "Group Policy Enforcer")
+
+def remote_desktop_auditor(self):
+    self.queue_task(lambda: tools.remote_desktop_auditor(self.command_history_log), self.default_timeout, "Remote Desktop Auditor")
+
+def task_automation_script_generator(self):
+    task = simpledialog.askstring("Task", "Enter task description:")
+    output = filedialog.asksaveasfilename(defaultextension=".bat")
+    self.queue_task(lambda: tools.task_automation_script_generator(task, output), self.default_timeout, "Task Automation Script Generator")
+
+# Reconnaissance Tools
+def passive_dns_resolver(self):
+    domain = simpledialog.askstring("Domain", "Enter domain:")
+    self.queue_task(lambda: tools.passive_dns_resolver(domain), self.default_timeout, "Passive DNS Resolver")
+
+def whois_lookup_tool(self):
+    domain = simpledialog.askstring("Domain", "Enter domain:")
+    self.queue_task(lambda: tools.whois_lookup_tool(domain), self.default_timeout, "WHOIS Lookup Tool")
+
+def subdomain_enumerator(self):
+    domain = simpledialog.askstring("Domain", "Enter domain:")
+    self.queue_task(lambda: tools.subdomain_enumerator(domain), self.default_timeout, "Subdomain Enumerator")
+
+def ssl_certificate_analyzer(self):
+    domain = simpledialog.askstring("Domain", "Enter domain:")
+    self.queue_task(lambda: tools.ssl_certificate_analyzer(domain), self.default_timeout, "SSL Certificate Analyzer")
+
+def network_topology_mapper(self):
+    subnet = simpledialog.askstring("Subnet", "Enter subnet (e.g., 192.168.1.):", initialvalue="192.168.1.")
+    self.queue_task(lambda: tools.network_topology_mapper(subnet), self.default_timeout, "Network Topology Mapper")
+
+def traceroute_analyzer(self):
+    host = simpledialog.askstring("Host", "Enter host to trace:", initialvalue="google.com")
+    self.queue_task(lambda: tools.traceroute_analyzer(host, self.command_history_log), self.default_timeout, "Traceroute Analyzer")
+
+def dns_cache_snooper(self):
+    self.queue_task(lambda: tools.dns_cache_snooper(self.command_history_log), self.default_timeout, "DNS Cache Snooper")
+
+def ip_reputation_checker(self):
+    ip = simpledialog.askstring("IP", "Enter IP address:")
+    self.queue_task(lambda: tools.ip_reputation_checker(ip), self.default_timeout, "IP Reputation Checker")
+
+def port_service_identifier(self):
+    host = simpledialog.askstring("Host", "Enter host:")
+    self.queue_task(lambda: tools.port_service_identifier(host), self.default_timeout, "Port Service Identifier")
+
+def packet_header_analyzer(self):
+    duration = simpledialog.askinteger("Duration", "Enter analysis duration (seconds):", initialvalue=10)
+    self.queue_task(lambda: tools.packet_header_analyzer(duration), duration, "Packet Header Analyzer")
 
 # Main function outside the class
 def main():

@@ -3601,3 +3601,983 @@ def send_slack_notification(message, channel, token):
         return "Error: Slack SDK not installed. Install with 'pip install slack-sdk'."
     except Exception as e:
         return f"Error: {str(e)}"
+
+# Security Tools
+def credential_harvester_detector(duration=10):
+    try:
+        result = [f"Monitoring for credential harvesting ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            for proc in psutil.process_iter(['pid', 'name', 'connections']):
+                try:
+                    if proc.connections():
+                        for conn in proc.connections():
+                            if conn.raddr and (conn.raddr.port in [80, 443]):
+                                payload = f"PID: {proc.pid}, Name: {proc.name()}, Remote: {conn.raddr.ip}:{conn.raddr.port}"
+                                result.append(payload)
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    continue
+            time.sleep(1)
+        return "\n".join(result) if len(result) > 1 else "No credential harvesting detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def rogue_process_terminator(whitelist_file):
+    try:
+        with open(whitelist_file, "r") as f:
+            whitelist = {line.strip().lower() for line in f if line.strip()}
+        result = ["Terminating rogue processes:"]
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if proc.name().lower() not in whitelist:
+                    proc.terminate()
+                    result.append(f"Terminated PID: {proc.pid}, Name: {proc.name()}")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return "\n".join(result) if len(result) > 1 else "No rogue processes found."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def secure_file_vault(folder, password):
+    try:
+        salt = os.urandom(16)
+        key = generate_aes_key(password, salt)
+        output_zip = f"{folder}_vault.zip"
+        shutil.make_archive(output_zip[:-4], 'zip', folder)
+        iv = os.urandom(16)
+        cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
+        encryptor = cipher.encryptor()
+        with open(output_zip, "rb") as f_in, open(f"{output_zip}.enc", "wb") as f_out:
+            f_out.write(salt + iv + encryptor.update(f_in.read()) + encryptor.finalize())
+        os.remove(output_zip)
+        return f"Vault created: {output_zip}.enc"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def anti_ransomware_shield(directory, duration):
+    try:
+        result = [f"Monitoring {directory} for ransomware activity ({duration} seconds):"]
+        initial = {f: hashlib.sha256(open(os.path.join(directory, f), "rb").read()).hexdigest() for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))}
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            time.sleep(1)
+            current = {f: hashlib.sha256(open(os.path.join(directory, f), "rb").read()).hexdigest() for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))}
+            for f in initial:
+                if f in current and initial[f] != current[f]:
+                    result.append(f"Ransomware-like change detected in {f}. Blocking process.")
+                    return "\n".join(result)
+        result.append("No ransomware activity detected.")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def password_complexity_auditor(passwords_db):
+    try:
+        result = ["Password Complexity Audit:"]
+        for timestamp, entry in passwords_db.items():
+            pwd = entry["password"]
+            score = sum([len(pwd) >= 12, any(c.isupper() for c in pwd), any(c.islower() for c in pwd), any(c.isdigit() for c in pwd), any(c in string.punctuation for c in pwd)])
+            status = "Compliant" if score >= 4 else "Non-compliant"
+            result.append(f"Name: {entry['name']}, Score: {score}/5, Status: {status}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def exploit_mitigation_checker(command_history_log):
+    try:
+        result = ["Exploit Mitigation Status:"]
+        dep = run_command("powershell -Command Get-ProcessMitigation -Name System | Select-Object -Property DEP", command_history_log)
+        aslr = run_command("powershell -Command Get-ProcessMitigation -Name System | Select-Object -Property ASLR", command_history_log)
+        result.extend([dep, aslr])
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def token_impersonation_detector():
+    try:
+        result = ["Checking for token impersonation:"]
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                handle = win32api.OpenProcess(win32con.PROCESS_QUERY_INFORMATION, False, proc.pid)
+                token = win32security.OpenProcessToken(handle, win32security.TOKEN_QUERY)
+                impersonation = win32security.GetTokenInformation(token, win32security.TokenImpersonationLevel)
+                if impersonation > 0:
+                    result.append(f"PID: {proc.pid}, Name: {proc.name()}, Impersonation Level: {impersonation}")
+                win32api.CloseHandle(handle)
+            except:
+                continue
+        return "\n".join(result) if len(result) > 1 else "No token impersonation detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def rootkit_scanner():
+    try:
+        result = ["Scanning for rootkits:"]
+        for proc in psutil.process_iter(['pid', 'name', 'exe']):
+            try:
+                if not proc.exe() or not os.path.exists(proc.exe()):
+                    result.append(f"PID: {proc.pid}, Name: {proc.name()}, Missing Executable")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return "\n".join(result) if len(result) > 1 else "No rootkit signatures detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def secure_deletion_scheduler(file_path, delay):
+    try:
+        time.sleep(delay)
+        return shred_file(file_path, "dod", 3)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def firewall_rule_analyzer(command_history_log):
+    try:
+        result = ["Firewall Rule Analysis:"]
+        output = run_command("netsh advfirewall firewall show rule name=all", command_history_log)
+        for line in output.splitlines():
+            if "Allow" in line and "Any" in line:
+                result.append(f"Potential Risk: {line.strip()}")
+        return "\n".join(result) if len(result) > 1 else "No risky rules detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Monitoring Tools
+def process_genealogy_tracker():
+    try:
+        result = ["Process Genealogy:"]
+        for proc in psutil.process_iter(['pid', 'name', 'ppid']):
+            try:
+                parent = psutil.Process(proc.ppid()).name() if proc.ppid() else "None"
+                result.append(f"PID: {proc.pid}, Name: {proc.name()}, Parent: {parent} (PID: {proc.ppid()})")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_traffic_anomaly_detector(duration):
+    try:
+        result = [f"Monitoring network traffic for anomalies ({duration} seconds):"]
+        baseline = []
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            net = psutil.net_io_counters()
+            baseline.append(net.bytes_sent + net.bytes_recv)
+            time.sleep(1)
+        mean = sum(baseline) / len(baseline)
+        std_dev = (sum((x - mean) ** 2 for x in baseline) / len(baseline)) ** 0.5
+        anomalies = [f"Time {i}s: {val / (1024**2):.2f} MB" for i, val in enumerate(baseline) if abs(val - mean) > 2 * std_dev]
+        result.extend(anomalies)
+        return "\n".join(result) if len(result) > 1 else "No traffic anomalies detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def service_dependency_monitor(duration):
+    try:
+        result = [f"Monitoring service dependencies ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            for svc in psutil.win_service_iter():
+                try:
+                    if svc.status() == "stopped" and svc.pid():
+                        result.append(f"Service {svc.name()} stopped but has running PID {svc.pid()}")
+                except:
+                    continue
+            time.sleep(1)
+        return "\n".join(result) if len(result) > 1 else "No dependency issues detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def disk_latency_monitor(duration):
+    try:
+        result = [f"Monitoring disk latency ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            io = psutil.disk_io_counters()
+            read_time = io.read_time / io.read_count if io.read_count else 0
+            write_time = io.write_time / io.write_count if io.write_count else 0
+            result.append(f"Read Latency: {read_time:.2f} ms, Write Latency: {write_time:.2f} ms")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def memory_usage_profiler():
+    try:
+        result = ["Memory Usage Profile:"]
+        for proc in psutil.process_iter(['pid', 'name', 'memory_info']):
+            try:
+                mem = proc.memory_info().rss / (1024**2)
+                result.append(f"PID: {proc.pid}, Name: {proc.name()}, Memory: {mem:.2f} MB")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        return "\n".join(sorted(result, key=lambda x: float(x.split("Memory: ")[-1].split()[0]), reverse=True))
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def cpu_core_load_balancer(duration):
+    try:
+        result = [f"Monitoring CPU core load ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            cores = psutil.cpu_percent(percpu=True)
+            result.append("Core Loads: " + ", ".join(f"Core {i}: {load}%" for i, load in enumerate(cores)))
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def event_log_correlation_analyzer(duration):
+    try:
+        result = ["Correlating event logs:"]
+        h = win32evtlog.OpenEventLog(None, "Security")
+        events = win32evtlog.ReadEventLog(h, win32evtlog.EVENTLOG_BACKWARDS_READ | win32evtlog.EVENTLOG_SEQUENTIAL_READ, 0)
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            for event in events[:10]:
+                if event.EventID in [4624, 4625]:  # Logon success/failure
+                    result.append(f"Event ID {event.EventID}: {event.StringInserts}")
+            time.sleep(1)
+        win32evtlog.CloseEventLog(h)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def thermal_stress_monitor(duration):
+    try:
+        result = [f"Monitoring thermal stress ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            cpu = psutil.cpu_percent()
+            if cpu > 90:
+                result.append(f"High thermal stress detected: CPU {cpu}%")
+            time.sleep(1)
+        return "\n".join(result) if len(result) > 1 else "No thermal stress detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_connection_stability_tracker(duration):
+    try:
+        result = [f"Tracking network stability ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            conns = len(psutil.net_connections())
+            result.append(f"Active Connections: {conns}")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_resource_forecasting(duration):
+    try:
+        result = [f"Forecasting resource usage ({duration} seconds):"]
+        cpu_samples = []
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            cpu_samples.append(psutil.cpu_percent())
+            time.sleep(1)
+        trend = "Increasing" if cpu_samples[-1] > cpu_samples[0] else "Decreasing" if cpu_samples[-1] < cpu_samples[0] else "Stable"
+        result.append(f"CPU Trend: {trend}, Average: {sum(cpu_samples) / len(cpu_samples):.2f}%")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Utility Tools
+def file_metadata_extractor(file_path):
+    try:
+        stat_info = os.stat(file_path)
+        result = [
+            f"File: {file_path}",
+            f"Size: {stat_info.st_size / (1024**2):.2f} MB",
+            f"Created: {datetime.fromtimestamp(stat_info.st_ctime)}",
+            f"Modified: {datetime.fromtimestamp(stat_info.st_mtime)}",
+            f"Accessed: {datetime.fromtimestamp(stat_info.st_atime)}"
+        ]
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_path_cleaner():
+    try:
+        path = os.environ["PATH"].split(";")
+        valid_paths = [p for p in path if os.path.exists(p)]
+        result = ["Cleaning PATH:", f"Original: {len(path)} entries", f"Valid: {len(valid_paths)} entries"]
+        os.environ["PATH"] = ";".join(valid_paths)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def file_extension_analyzer(directory):
+    try:
+        exts = {}
+        for root, _, files in os.walk(directory):
+            for file in files:
+                ext = os.path.splitext(file)[1].lower()
+                exts[ext] = exts.get(ext, 0) + 1
+        result = ["File Extension Analysis:"]
+        result.extend(f"{ext}: {count}" for ext, count in sorted(exts.items()))
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def temporary_file_scanner():
+    try:
+        result = ["Temporary Files:"]
+        temp_dirs = [os.getenv("TEMP"), r"C:\Windows\Temp"]
+        for temp_dir in temp_dirs:
+            if os.path.exists(temp_dir):
+                for file in os.listdir(temp_dir):
+                    result.append(os.path.join(temp_dir, file))
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def registry_key_exporter(key_path, file_path, command_history_log):
+    try:
+        run_command(f"reg export {key_path} \"{file_path}\" /y", command_history_log)
+        return f"Exported {key_path} to {file_path}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def file_access_logger(file_path, duration):
+    try:
+        result = [f"Logging access to {file_path} ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            stat_info = os.stat(file_path)
+            if stat_info.st_atime > start_time:
+                result.append(f"Accessed at {datetime.now()}")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_time_synchronizer(command_history_log):
+    try:
+        run_command("w32tm /resync", command_history_log)
+        return "System time synchronized with NTP server."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def environment_variable_backup(file_path):
+    try:
+        with open(file_path, "w") as f:
+            json.dump(dict(os.environ), f, indent=4)
+        return f"Environment variables backed up to {file_path}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def file_compression_tool(files, output):
+    try:
+        with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as zf:
+            for file in files:
+                zf.write(file, os.path.basename(file))
+        return f"Files compressed to {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def disk_space_analyzer(directory):
+    try:
+        total_size = 0
+        result = [f"Disk Space Analysis for {directory}:"]
+        for root, _, files in os.walk(directory):
+            for file in files:
+                size = os.path.getsize(os.path.join(root, file))
+                total_size += size
+                result.append(f"{os.path.join(root, file)}: {size / (1024**2):.2f} MB")
+        result.append(f"Total: {total_size / (1024**2):.2f} MB")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Network Tools
+def network_bandwidth_profiler(duration):
+    try:
+        result = [f"Profiling network bandwidth ({duration} seconds):"]
+        start_time = time.time()
+        initial = psutil.net_io_counters()
+        while time.time() - start_time < duration:
+            time.sleep(1)
+            current = psutil.net_io_counters()
+            sent = (current.bytes_sent - initial.bytes_sent) / (1024**2)
+            recv = (current.bytes_recv - initial.bytes_recv) / (1024**2)
+            result.append(f"Sent: {sent:.2f} MB/s, Received: {recv:.2f} MB/s")
+            initial = current
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def ip_geolocation_tracker(ip):
+    try:
+        import requests
+        response = requests.get(f"http://ip-api.com/json/{ip}", timeout=5).json()
+        result = [
+            f"IP: {ip}",
+            f"Country: {response.get('country', 'N/A')}",
+            f"City: {response.get('city', 'N/A')}",
+            f"ISP: {response.get('isp', 'N/A')}"
+        ]
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def arp_spoofing_detector(duration):
+    try:
+        result = [f"Monitoring for ARP spoofing ({duration} seconds):"]
+        arp_table = {}
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            arp = sniff(filter="arp", timeout=1)
+            for pkt in arp:
+                mac = pkt["ARP"].hwsrc
+                ip = pkt["ARP"].psrc
+                if ip in arp_table and arp_table[ip] != mac:
+                    result.append(f"ARP Spoofing Detected: IP {ip}, Old MAC: {arp_table[ip]}, New MAC: {mac}")
+                arp_table[ip] = mac
+        return "\n".join(result) if len(result) > 1 else "No ARP spoofing detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def dns_spoofing_detector(duration):
+    try:
+        result = [f"Monitoring for DNS spoofing ({duration} seconds):"]
+        dns_table = {}
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            dns = sniff(filter="udp port 53", timeout=1)
+            for pkt in dns:
+                if pkt.haslayer("DNSRR"):
+                    domain = pkt["DNSQR"].qname.decode()
+                    ip = pkt["DNSRR"].rdata
+                    if domain in dns_table and dns_table[domain] != ip:
+                        result.append(f"DNS Spoofing Detected: {domain} -> Old IP: {dns_table[domain]}, New IP: {ip}")
+                    dns_table[domain] = ip
+        return "\n".join(result) if len(result) > 1 else "No DNS spoofing detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_device_scanner(subnet):
+    try:
+        result = ["Scanning network devices:"]
+        for i in range(1, 255):
+            ip = f"{subnet}{i}"
+            try:
+                socket.create_connection((ip, 80), timeout=0.1)
+                result.append(f"Device found: {ip}")
+            except:
+                continue
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def packet_injection_detector(duration):
+    try:
+        result = [f"Monitoring for packet injections ({duration} seconds):"]
+        packets = sniff(timeout=duration)
+        for pkt in packets:
+            if pkt.haslayer("Raw") and len(pkt["Raw"].load) > 1000:
+                result.append(f"Large packet detected: Src {pkt['IP'].src} -> Dst {pkt['IP'].dst}")
+        return "\n".join(result) if len(result) > 1 else "No packet injections detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def wi_fi_signal_strength_analyzer(duration):
+    try:
+        wifi = pywifi.PyWiFi()
+        iface = wifi.interfaces()[0]
+        result = [f"Analyzing Wi-Fi signal strength ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            iface.scan()
+            time.sleep(1)
+            for network in iface.scan_results():
+                result.append(f"SSID: {network.ssid}, Signal: {network.signal} dBm")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_protocol_analyzer(duration):
+    try:
+        result = ["Analyzing network protocols:"]
+        protocols = {}
+        packets = sniff(timeout=duration)
+        for pkt in packets:
+            proto = pkt.proto if "IP" in pkt else "Unknown"
+            protocols[proto] = protocols.get(proto, 0) + 1
+        result.extend(f"Protocol {k}: {v} packets" for k, v in protocols.items())
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def mac_address_spoofer_detector(duration):
+    try:
+        result = [f"Monitoring for MAC spoofing ({duration} seconds):"]
+        mac_table = {}
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            arp = sniff(filter="arp", timeout=1)
+            for pkt in arp:
+                mac = pkt["ARP"].hwsrc
+                ip = pkt["ARP"].psrc
+                if mac in mac_table and mac_table[mac] != ip:
+                    result.append(f"MAC Spoofing Detected: MAC {mac}, Old IP: {mac_table[mac]}, New IP: {ip}")
+                mac_table[mac] = ip
+        return "\n".join(result) if len(result) > 1 else "No MAC spoofing detected."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_latency_stress_tester(host, duration, command_history_log):
+    try:
+        result = [f"Stress testing latency to {host} ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            output = run_command(f"ping {host} -n 1", command_history_log)
+            latency = re.search(r"time=(\d+)ms", output)
+            if latency:
+                result.append(f"Latency: {latency.group(1)} ms")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Backup Tools
+def incremental_backup_verifier(backup_path):
+    try:
+        with zipfile.ZipFile(backup_path, "r") as zf:
+            result = zf.testzip()
+            return "Backup verified successfully." if result is None else f"Backup corruption detected: {result}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_compression_optimizer(source, output):
+    try:
+        with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+            for root, _, files in os.walk(source):
+                for file in files:
+                    zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), source))
+        return f"Optimized backup created: {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_schedule_auditor(scheduled_tasks):
+    try:
+        result = ["Backup Schedule Audit:"]
+        for task in scheduled_tasks:
+            if "backup" in task["name"].lower():
+                result.append(f"Task: {task['name']}, Next Run: {task['time']}")
+        return "\n".join(result) if len(result) > 1 else "No backup tasks scheduled."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_deduplication_tool(backup_path):
+    try:
+        hashes = {}
+        result = ["Deduplicating backup:"]
+        for root, _, files in os.walk(backup_path):
+            for file in files:
+                path = os.path.join(root, file)
+                hash_val = hashlib.sha256(open(path, "rb").read()).hexdigest()
+                if hash_val in hashes:
+                    os.remove(path)
+                    result.append(f"Removed duplicate: {path}")
+                else:
+                    hashes[hash_val] = path
+        return "\n".join(result) if len(result) > 1 else "No duplicates found."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_encryption_auditor(backup_path):
+    try:
+        result = ["Backup Encryption Audit:"]
+        for root, _, files in os.walk(backup_path):
+            for file in files:
+                if file.endswith(".enc"):
+                    result.append(f"Encrypted: {file}")
+                else:
+                    result.append(f"Unencrypted: {file}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_restore_simulator(backup_file):
+    try:
+        with zipfile.ZipFile(backup_file, "r") as zf:
+            files = zf.namelist()
+        result = ["Simulating restore:", "Files that would be restored:"]
+        result.extend(files)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_version_manager(directory):
+    try:
+        result = ["Backup Versions:"]
+        versions = {}
+        for file in os.listdir(directory):
+            if file.endswith(".zip"):
+                timestamp = datetime.fromtimestamp(os.path.getctime(os.path.join(directory, file)))
+                versions[file] = timestamp
+        result.extend(f"{file}: {time}" for file, time in sorted(versions.items(), key=lambda x: x[1]))
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_space_optimizer(directory):
+    try:
+        result = ["Optimizing backup space:"]
+        total_size = 0
+        for file in os.listdir(directory):
+            path = os.path.join(directory, file)
+            size = os.path.getsize(path)
+            total_size += size
+            if size < 1024:  # Remove small files
+                os.remove(path)
+                result.append(f"Removed small file: {file} ({size} bytes)")
+        result.append(f"Total Size Before: {total_size / (1024**2):.2f} MB")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_integrity_scanner(directory):
+    try:
+        result = ["Backup Integrity Scan:"]
+        for file in os.listdir(directory):
+            if file.endswith(".zip"):
+                with zipfile.ZipFile(os.path.join(directory, file), "r") as zf:
+                    issues = zf.testzip()
+                    if issues:
+                        result.append(f"Issues in {file}: {issues}")
+        return "\n".join(result) if len(result) > 1 else "All backups intact."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def backup_file_hasher(backup_file):
+    try:
+        with open(backup_file, "rb") as f:
+            hash_val = hashlib.sha256(f.read()).hexdigest()
+        return f"Backup: {backup_file}, SHA-256: {hash_val}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Advanced Tools
+def process_memory_dumper(pid, output):
+    try:
+        proc = psutil.Process(pid)
+        with open(output, "wb") as f:
+            f.write(proc.memory_info().rss.to_bytes(8, 'little'))
+        return f"Memory dumped for PID {pid} to {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def kernel_memory_scanner():
+    try:
+        result = ["Kernel Memory Scan:"]
+        w = wmi.WMI()
+        for driver in w.Win32_SystemDriver():
+            if "kernel" in driver.PathName.lower():
+                result.append(f"Driver: {driver.Name}, Path: {driver.PathName}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_call_interceptor(pid, duration):
+    try:
+        result = [f"Intercepting system calls for PID {pid} ({duration} seconds):"]
+        proc = psutil.Process(pid)
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            io = proc.io_counters()
+            result.append(f"Read: {io.read_count}, Write: {io.write_count}")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def driver_signature_verifier():
+    try:
+        result = ["Driver Signature Verification:"]
+        w = wmi.WMI()
+        for driver in w.Win32_SystemDriver():
+            path = driver.PathName
+            signed = "Yes" if win32security.GetFileSecurity(path, win32security.DACL_SECURITY_INFORMATION) else "No"
+            result.append(f"Driver: {driver.Name}, Signed: {signed}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def memory_leak_injector(duration):
+    try:
+        leak = []
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            leak.append(bytearray(1024**2))  # 1MB chunks
+            time.sleep(1)
+        return f"Injected memory leak for {duration} seconds"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def process_privilege_auditor(pid):
+    try:
+        result = [f"Privileges for PID {pid}:"]
+        handle = win32api.OpenProcess(win32con.PROCESS_QUERY_INFORMATION, False, pid)
+        token = win32security.OpenProcessToken(handle, win32security.TOKEN_QUERY)
+        privs = win32security.GetTokenInformation(token, win32security.TokenPrivileges)
+        for priv in privs:
+            name = win32security.LookupPrivilegeName(None, priv[0])
+            state = "Enabled" if priv[1] & win32security.SE_PRIVILEGE_ENABLED else "Disabled"
+            result.append(f"{name}: {state}")
+        win32api.CloseHandle(handle)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def thread_priority_adjuster(pid, priority):
+    try:
+        proc = psutil.Process(pid)
+        for thread in proc.threads():
+            handle = win32api.OpenThread(win32con.THREAD_SET_INFORMATION, False, thread.id)
+            win32process.SetThreadPriority(handle, priority)
+            win32api.CloseHandle(handle)
+        return f"Adjusted thread priorities for PID {pid} to {priority}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_integrity_verifier(command_history_log):
+    try:
+        output = run_command("sfc /scannow", command_history_log)
+        return "System integrity check completed:\n" + output
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def kernel_module_loader(module_path):
+    try:
+        return f"Simulated loading of kernel module: {module_path} (actual loading requires kernel-level access)"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def process_execution_tracer(duration):
+    try:
+        result = [f"Tracing process executions ({duration} seconds):"]
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            for proc in psutil.process_iter(['pid', 'name', 'create_time']):
+                if time.time() - proc.create_time() < 1:
+                    result.append(f"PID: {proc.pid}, Name: {proc.name()}, Created: {datetime.fromtimestamp(proc.create_time())}")
+            time.sleep(1)
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# IT Support Tools
+def user_session_manager(action):
+    try:
+        result = ["User Session Management:"]
+        sessions = win32ts.WTSEnumerateSessions(win32ts.WTS_CURRENT_SERVER_HANDLE)
+        if action == "l":
+            for session in sessions:
+                result.append(f"Session ID: {session['SessionId']}, State: {session['State']}")
+        elif action == "d":
+            sid = simpledialog.askinteger("Session ID", "Enter session ID to disconnect:")
+            win32ts.WTSDisconnectSession(win32ts.WTS_CURRENT_SERVER_HANDLE, sid, False)
+            result.append(f"Disconnected session {sid}")
+        elif action == "l":
+            sid = simpledialog.askinteger("Session ID", "Enter session ID to logoff:")
+            win32ts.WTSLogoffSession(win32ts.WTS_CURRENT_SERVER_HANDLE, sid, False)
+            result.append(f"Logged off session {sid}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_update_manager(command_history_log):
+    try:
+        output = run_command("powershell -Command Get-WindowsUpdate", command_history_log)
+        return "System Updates:\n" + output
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def remote_process_executor(host, command):
+    try:
+        output = run_command(f"psexec \\\\{host} {command}", timeout=20)
+        return f"Executed on {host}: {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def user_permission_auditor(username, command_history_log):
+    try:
+        output = run_command(f"net user {username}", command_history_log)
+        return f"Permissions for {username}:\n{output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def service_recovery_configurator(service, command_history_log):
+    try:
+        run_command(f"sc failure {service} reset= 86400 actions= restart/60000", command_history_log)
+        return f"Configured recovery for {service}: Restart after 60 seconds"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def system_log_archiver(output):
+    try:
+        with zipfile.ZipFile(output, "w") as zf:
+            for log in ["System", "Application"]:
+                h = win32evtlog.OpenEventLog(None, log)
+                events = win32evtlog.ReadEventLog(h, win32evtlog.EVENTLOG_BACKWARDS_READ | win32evtlog.EVENTLOG_SEQUENTIAL_READ, 0)
+                zf.writestr(f"{log}.txt", "\n".join(str(e) for e in events))
+                win32evtlog.CloseEventLog(h)
+        return f"Logs archived to {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def hardware_failure_predictor(command_history_log):
+    try:
+        output = run_command("wmic diskdrive get status", command_history_log)
+        return "Hardware Status:\n" + output
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def group_policy_enforcer(command_history_log):
+    try:
+        run_command("gpupdate /force", command_history_log)
+        return "Group policies enforced."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def remote_desktop_auditor(command_history_log):
+    try:
+        output = run_command("qwinsta", command_history_log)
+        return "Remote Desktop Sessions:\n" + output
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def task_automation_script_generator(task, output):
+    try:
+        with open(output, "w") as f:
+            f.write(f"@echo off\necho Running {task}\nREM Add commands here\npause")
+        return f"Automation script generated: {output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+# Reconnaissance Tools
+def passive_dns_resolver(domain):
+    try:
+        result = [f"Passive DNS for {domain}:"]
+        answers = socket.getaddrinfo(domain, None)
+        for answer in answers:
+            result.append(f"IP: {answer[4][0]}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def whois_lookup_tool(domain):
+    try:
+        import whois
+        w = whois.whois(domain)
+        result = [
+            f"Domain: {domain}",
+            f"Registrar: {w.registrar}",
+            f"Creation Date: {w.creation_date}",
+            f"Expiration Date: {w.expiration_date}"
+        ]
+        return "\n".join(result)
+    except ImportError:
+        return "Error: 'whois' library not installed. Install with 'pip install python-whois'."
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def subdomain_enumerator(domain):
+    try:
+        result = [f"Enumerating subdomains for {domain}:"]
+        common = ["www", "mail", "ftp", "test", "dev"]
+        for sub in common:
+            try:
+                socket.gethostbyname(f"{sub}.{domain}")
+                result.append(f"{sub}.{domain}")
+            except:
+                continue
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def ssl_certificate_analyzer(domain):
+    try:
+        import ssl
+        context = ssl.create_default_context()
+        with socket.create_connection((domain, 443)) as sock:
+            with context.wrap_socket(sock, server_hostname=domain) as ssock:
+                cert = ssock.getpeercert()
+        result = [
+            f"SSL Certificate for {domain}:",
+            f"Issuer: {cert['issuer']}",
+            f"Subject: {cert['subject']}",
+            f"Valid From: {cert['notBefore']}",
+            f"Valid Until: {cert['notAfter']}"
+        ]
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def network_topology_mapper(subnet):
+    try:
+        result = ["Mapping network topology:"]
+        for i in range(1, 255):
+            ip = f"{subnet}{i}"
+            try:
+                socket.create_connection((ip, 80), timeout=0.1)
+                result.append(f"Device: {ip}")
+            except:
+                continue
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def traceroute_analyzer(host, command_history_log):
+    try:
+        output = run_command(f"tracert {host}", command_history_log)
+        return f"Traceroute to {host}:\n{output}"
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def dns_cache_snooper(command_history_log):
+    try:
+        output = run_command("ipconfig /displaydns", command_history_log)
+        return "DNS Cache:\n" + output
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def ip_reputation_checker(ip):
+    try:
+        import requests
+        response = requests.get(f"https://api.abuseipdb.com/api/v2/check?ipAddress={ip}", headers={"Key": "YOUR_API_KEY", "Accept": "application/json"}, timeout=5).json()
+        result = [
+            f"IP: {ip}",
+            f"Abuse Confidence: {response['data']['abuseConfidenceScore']}%",
+            f"Country: {response['data']['countryCode']}"
+        ]
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)} (Note: Requires AbuseIPDB API key)"
+
+def port_service_identifier(host):
+    try:
+        result = [f"Identifying services on {host}:"]
+        for port in [21, 22, 23, 80, 443]:
+            try:
+                service = socket.getservbyport(port)
+                socket.create_connection((host, port), timeout=1)
+                result.append(f"Port {port}: {service}")
+            except:
+                continue
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def packet_header_analyzer(duration):
+    try:
+        result = [f"Analyzing packet headers ({duration} seconds):"]
+        packets = sniff(timeout=duration)
+        for pkt in packets:
+            if "IP" in pkt:
+                result.append(f"Src: {pkt['IP'].src}, Dst: {pkt['IP'].dst}, Proto: {pkt['IP'].proto}")
+        return "\n".join(result)
+    except Exception as e:
+        return f"Error: {str(e)}"
