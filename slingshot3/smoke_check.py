@@ -1,7 +1,8 @@
 """Basic SlingShot repository smoke checks.
 
-This script is intentionally lightweight. It checks the repo layout and config
-without launching the GUI or importing every tool dependency.
+This script is intentionally lightweight. It checks the repo layout, config,
+and next-generation registry wiring without launching the GUI or importing the
+legacy 4k+ line tool module.
 """
 from __future__ import annotations
 
@@ -12,12 +13,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 APP_DIR = ROOT / "slingshot3"
+if str(APP_DIR) not in sys.path:
+    sys.path.insert(0, str(APP_DIR))
 
 REQUIRED_FILES = [
     ROOT / "README.md",
     ROOT / "requirements.txt",
     APP_DIR / "slingshot.py",
+    APP_DIR / "slingshot_next.py",
     APP_DIR / "tools.py",
+    APP_DIR / "safe_tools.py",
+    APP_DIR / "tool_registry.py",
     APP_DIR / "custom_tools.py",
     APP_DIR / "config.json",
 ]
@@ -66,12 +72,40 @@ def check_config() -> list[str]:
         return [f"Invalid JSON in config: {exc}"]
 
     favorites = config.get("favorites", [])
-    if any(item is None for item in favorites):
-        problems.append("Config favorites contains null entries. Remove them or replace with valid tool names.")
+    if not isinstance(favorites, list):
+        problems.append("Config favorites must be a list.")
+    elif any(item is None or item == "" for item in favorites):
+        problems.append("Config favorites contains blank/null entries.")
 
     default_timeout = config.get("default_timeout")
     if not isinstance(default_timeout, int) or default_timeout < 1:
         problems.append("Config default_timeout must be an integer greater than zero.")
+
+    return problems
+
+
+def check_next_registry() -> list[str]:
+    problems: list[str] = []
+    try:
+        from tool_registry import all_tools, categories
+        from safe_tools import HANDLERS
+    except Exception as exc:
+        return [f"Failed to import next-gen registry modules: {type(exc).__name__}: {exc}"]
+
+    tools = all_tools()
+    if not tools:
+        problems.append("Tool registry is empty.")
+
+    seen_names: set[str] = set()
+    for tool in tools:
+        if tool.name in seen_names:
+            problems.append(f"Duplicate tool name in registry: {tool.name}")
+        seen_names.add(tool.name)
+        if tool.handler_name not in HANDLERS:
+            problems.append(f"Missing handler for {tool.name}: {tool.handler_name}")
+
+    if not categories():
+        problems.append("No categories returned by registry.")
 
     return problems
 
@@ -81,6 +115,7 @@ def main() -> int:
         "files": check_required_files(),
         "imports": check_core_imports(),
         "config": check_config(),
+        "next_registry": check_next_registry(),
     }
 
     failed = False
